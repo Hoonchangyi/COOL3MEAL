@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.myapp.test.mapper.LoginMapper">
+    <select id="getUser" parameterType="String" resultType="User">
+        SELECT   *
+        FROM    COOL_3_MEAL_USER
+        WHERE   email = #{email}
+    </select>
+
+    <select id="getNickname" parameterType="String" resultType="User">
+        SELECT   *
+        FROM    COOL_3_MEAL_USER
+        WHERE   nickname = #{nickname}
+    </select>
+
+    <insert id="insertUser" keyProperty="uno">
+        <selectKey keyProperty="uno" resultType="int" order="BEFORE">
+            SELECT COALESCE(MAX(uno), 0) + 1 AS uno
+            FROM   COOL_3_MEAL_USER
+        </selectKey>
+
+        INSERT INTO COOL_3_MEAL_USER (uno, email, pass, nickname, sex, birth, phone)
+        VALUES (#{uno}, #{email}, #{pass}, #{nickname}, #{sex}, #{birth}, #{phone})
+    </insert>
+
+<!--    <update id="updateUser" parameterType="User">-->
+<!--        UPDATE  member_tbl-->
+<!--        SET pass=#{pass},zip=#{zip},addr1=#{addr1},addr2=#{addr2},phone=#{phone},email=#{email},birthday=#{birthday}-->
+<!--        WHERE   id  = #{id}-->
+<!--    </update>-->
+
+<!--    <select id="findId" parameterType="String" resultType="User">-->
+<!--        SELECT   *-->
+<!--        FROM    member_tbl-->
+<!--        WHERE   name = #{name} and email = #{email}-->
+<!--    </select>-->
+
+<!--    <select id="findPass" parameterType="String" resultType="User">-->
+<!--        SELECT   *-->
+<!--        FROM    member_tbl-->
+<!--        WHERE   id = #{id} and email = #{email}-->
+<!--    </select>-->
+
+<!--    <update id="updatePass" parameterType="User">-->
+<!--        UPDATE  member_tbl-->
+<!--        SET pass=#{updatepass2}-->
+<!--        WHERE   id = #{id}-->
+<!--    </update>-->
+
+</mapper>

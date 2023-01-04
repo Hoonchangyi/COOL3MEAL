@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.myapp.test.mapper.RecipeMapper">
+    <select id="getLikeRecipe" resultType="Recipe">
+        SELECT   *
+        FROM    COOL_3_MEAL_RECIPE
+        ORDER BY like_num DESC
+    </select>
+
+    <select id="getNewRecipe" resultType="Recipe">
+        SELECT   *
+        FROM    COOL_3_MEAL_RECIPE
+        ORDER BY wdate ASC
+    </select>
+
+    <select id="getRecipe" resultType="Recipe">
+        SELECT   *
+        FROM    COOL_3_MEAL_RECIPE
+    </select>
+
+    <select id="getDetailRecipe" resultType="Detail">
+        SELECT *
+        FROM COOL_3_MEAL_RECIPE
+        WHERE RECIPE_ID = #{RECIPE_ID}
+
+    </select>
+
+    <select id="getDetailOrder" resultType="Detail">
+        SELECT *
+        FROM COOL_3_MEAL_RECIPE_CRSE
+        WHERE RECIPE_ID = #{RECIPE_ID}
+    </select>
+
+    <select id="getRecipeIrdny" resultType="Detail">
+        SELECT *
+        FROM COOL_3_MEAL_RECIPE_IRDNT
+        WHERE RECIPE_ID = #{RECIPE_ID}
+    </select>
+
+<!--    SELECT   *-->
+<!--    FROM    COOL_3_MEAL_RECIPE-->
+<!--    where RECIPE_ID = 1 AND RECIPE_NM_KO ='나물비빔밥';-->
+
+<!--    SELECT   *-->
+<!--    FROM    COOL_3_MEAL_RECIPE_IRDNT-->
+<!--    where RECIPE_ID = 1;-->
+
+<!--    SELECT   *-->
+<!--    FROM    COOL_3_MEAL_RECIPE_CRSE-->
+<!--    where RECIPE_ID = 1;-->
+
+</mapper>

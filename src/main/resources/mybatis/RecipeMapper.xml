@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.myapp.test.mapper.RecipeMapper">
+    <select id="getLikeRecipe" resultType="Recipe">
+        SELECT   *
+        FROM
+        (
+        SELECT   *
+        FROM    COOL_3_MEAL_RECIPE
+        ORDER BY like_num DESC
+        )
+        where rownum &lt;= 4
+    </select>
+
+    <select id="getNewRecipe" resultType="Recipe">
+        SELECT   *
+        FROM
+        (
+        SELECT   *
+        FROM    COOL_3_MEAL_RECIPE
+        ORDER BY wdate DESC
+        )
+        where rownum &lt;= 4
+    </select>
+
+    <select id="getLikeDiet" resultType="Diet">
+        SELECT   *
+        FROM
+        (
+        SELECT   *
+        FROM    COOL_3_MEAL_DIET
+        ORDER BY D_VIEW_NUM DESC
+        )
+        where rownum &lt;= 4
+    </select>
+
+    <select id="getDetailRecipe" resultType="Detail">
+        SELECT *
+        FROM COOL_3_MEAL_RECIPE
+        WHERE RECIPE_ID = #{RECIPE_ID}
+
+    </select>
+
+    <select id="getDetailOrder" resultType="Detail">
+        SELECT *
+        FROM COOL_3_MEAL_RECIPE_CRSE
+        WHERE RECIPE_ID = #{RECIPE_ID}
+    </select>
+
+    <select id="getDetailDiet" resultType="Diet">
+        SELECT DIET_NAME, DIET_EX, KEYWORD, 1 as ORDER_TEMP, d_no
+        FROM COOL_3_MEAL_diet
+        where d_no = #{d_no}
+        UNION
+        SELECT RECIPE_NM_KO, SUMRY, IMG, rownum+1 as ORDER_TEMP, recipe_id
+        FROM COOL_3_MEAL_RECIPE
+        WHERE
+        RECIPE_ID = (SELECT RECIPE_ID1 FROM COOL_3_MEAL_diet WHERE d_no = #{d_no})
+        or RECIPE_ID = (SELECT RECIPE_ID2 FROM COOL_3_MEAL_diet WHERE d_no = #{d_no})
+        or RECIPE_ID = (SELECT RECIPE_ID3 FROM COOL_3_MEAL_diet WHERE d_no = #{d_no})
+        ORDER BY ORDER_TEMP
+    </select>
+
+    <select id="getSearchRecipe" resultType="Detail">
+        SELECT *
+        FROM COOL_3_MEAL_RECIPE
+        WHERE recipe_nm_ko like '%'||#{recipe_nm_ko}||'%'
+    </select>
+
+    <select id="getSearchDiet" resultType="Diet">
+        SELECT *
+        FROM COOL_3_MEAL_DIET
+        WHERE diet_name like '%'||#{diet_name}||'%'
+    </select>
+
+    <insert id="insertDiet" keyProperty="d_no">
+        <selectKey keyProperty="d_no" resultType="int" order="BEFORE">
+            SELECT COALESCE(MAX(d_no), 0) + 1 AS d_no
+            FROM   COOL_3_MEAL_DIET
+        </selectKey>
+
+        INSERT INTO COOL_3_MEAL_DIET (d_no, email, recipe_id1, recipe_id2, recipe_id3, diet_name, diet_ex, keyword, imgd)
+        VALUES (#{d_no}, #{email}, #{recipe_id1}, #{recipe_id2}, #{recipe_id3}, #{diet_name}, #{diet_ex}, #{keyword}, #{imgd})
+    </insert>
+
+    <insert id="insertIngredient">
+        INSERT INTO COOL_3_REFRIGERATOR (storeinfo, ingredientName, numb, shelflife, img, email)
+        VALUES (#{storeinfo}, #{ingredientName}, #{numb}, #{shelflife}, #{img}, #{email})
+    </insert>
+
+    <select id="getRefrigerator" resultType="Refrigerator">
+        SELECT storeinfo, ingredientName, numb, TO_CHAR(shelflife, 'YYYY-MM-DD') as shelflife, img, email, TO_CHAR(writer_date, 'YYYY-MM-DD') as writer_date
+        FROM COOL_3_REFRIGERATOR
+        WHERE email = #{email}
+        ORDER by WRITER_DATE DESC
+    </select>
+
+    <delete id="delIngredient">
+        DELETE COOL_3_REFRIGERATOR
+        WHERE email = #{email} and ingredientname = #{ingredientName}
+    </delete>
+
+    <select id="getmyfridgeSearch1" resultType="MyfridgeSearch">
+        SELECT *
+        FROM COOL_3_MEAL_RECIPE
+        WHERE irdnt like '%'||#{txtData0[0]}||'%'
+    </select>
+
+    <select id="getmyfridgeSearch2" resultType="MyfridgeSearch">
+        SELECT *
+        FROM COOL_3_MEAL_RECIPE
+        WHERE irdnt like '%'||#{txtData0[0]}||'%' or irdnt like '%'||#{txtData0[1]}||'%'
+    </select>
+
+    <select id="getmyfridgeSearch3" resultType="MyfridgeSearch">
+        SELECT *
+        FROM COOL_3_MEAL_RECIPE
+        WHERE irdnt like '%'||#{txtData0[0]}||'%' or irdnt like '%'||#{txtData0[1]}||'%' or irdnt like '%'||#{txtData0[2]}||'%'
+    </select>
+
+    <select id="getmyfridgeSearch4" resultType="MyfridgeSearch">
+        SELECT *
+        FROM COOL_3_MEAL_RECIPE
+        WHERE irdnt like '%'||#{txtData0[0]}||'%' or irdnt like '%'||#{txtData0[1]}||'%' or irdnt like '%'||#{txtData0[2]}||'%' or irdnt like '%'||#{txtData0[3]}||'%'
+    </select>
+
+    <select id="getmyfridgeSearch5" resultType="MyfridgeSearch">
+        SELECT *
+        FROM COOL_3_MEAL_RECIPE
+        WHERE irdnt like '%'||#{txtData0[0]}||'%' or irdnt like '%'||#{txtData0[1]}||'%' or irdnt like '%'||#{txtData0[2]}||'%' or irdnt like '%'||#{txtData0[3]}||'%' or irdnt like '%'||#{txtData0[4]}||'%'
+    </select>
+
+    <select id="getmyfridgeSearch6" resultType="MyfridgeSearch">
+        SELECT *
+        FROM COOL_3_MEAL_RECIPE
+        WHERE irdnt like '%'||#{txtData0[0]}||'%' or irdnt like '%'||#{txtData0[1]}||'%' or irdnt like '%'||#{txtData0[2]}||'%' or irdnt like '%'||#{txtData0[3]}||'%' or irdnt like '%'||#{txtData0[4]}||'%' or irdnt like '%'||#{txtData0[5]}||'%'
+    </select>
+
+    <select id="getmyfridgeSearch7" resultType="MyfridgeSearch">
+        SELECT *
+        FROM COOL_3_MEAL_RECIPE
+        WHERE irdnt like '%'||#{txtData0[0]}||'%' or irdnt like '%'||#{txtData0[1]}||'%' or irdnt like '%'||#{txtData0[2]}||'%' or irdnt like '%'||#{txtData0[3]}||'%' or irdnt like '%'||#{txtData0[4]}||'%' or irdnt like '%'||#{txtData0[5]}||'%' or irdnt like '%'||#{txtData0[6]}||'%'
+    </select>
+
+    <select id="getmyfridgeSearch8" resultType="MyfridgeSearch">
+        SELECT *
+        FROM COOL_3_MEAL_RECIPE
+        WHERE irdnt like '%'||#{txtData0[0]}||'%' or irdnt like '%'||#{txtData0[1]}||'%' or irdnt like '%'||#{txtData0[2]}||'%' or irdnt like '%'||#{txtData0[3]}||'%' or irdnt like '%'||#{txtData0[4]}||'%' or irdnt like '%'||#{txtData0[5]}||'%' or irdnt like '%'||#{txtData0[6]}||'%' or irdnt like '%'||#{txtData0[7]}||'%'
+    </select>
+
+    <select id="getmyfridgeSearch9" resultType="MyfridgeSearch">
+        SELECT *
+        FROM COOL_3_MEAL_RECIPE
+        WHERE irdnt like '%'||#{txtData0[0]}||'%' or irdnt like '%'||#{txtData0[1]}||'%' or irdnt like '%'||#{txtData0[2]}||'%' or irdnt like '%'||#{txtData0[3]}||'%' or irdnt like '%'||#{txtData0[4]}||'%' or irdnt like '%'||#{txtData0[5]}||'%' or irdnt like '%'||#{txtData0[6]}||'%' or irdnt like '%'||#{txtData0[7]}||'%' or irdnt like '%'||#{txtData0[8]}||'%'
+    </select>
+
+    <select id="getmyfridgeSearch10" resultType="MyfridgeSearch">
+        SELECT *
+        FROM COOL_3_MEAL_RECIPE
+        WHERE irdnt like '%'||#{txtData0[0]}||'%' or irdnt like '%'||#{txtData0[1]}||'%' or irdnt like '%'||#{txtData0[2]}||'%' or irdnt like '%'||#{txtData0[3]}||'%' or irdnt like '%'||#{txtData0[4]}||'%' or irdnt like '%'||#{txtData0[5]}||'%' or irdnt like '%'||#{txtData0[6]}||'%' or irdnt like '%'||#{txtData0[7]}||'%' or irdnt like '%'||#{txtData0[8]}||'%' or irdnt like '%'||#{txtData0[9]}||'%'
+    </select>
+
+    <select id="getMyLikeDiet" resultType="Diet">
+        SELECT *
+        FROM COOL_3_MEAL_DIET
+        where email = #{email}
+    </select>
+
+    <delete id="delDiet">
+        DELETE COOL_3_MEAL_DIET
+        WHERE email = #{email} and d_no = #{d_no}
+    </delete>
+
+    <update id="updateIngredient">
+        update COOL_3_REFRIGERATOR SET storeinfo = #{storeinfo}, ingredientName = #{ingredientName}, numb = #{numb}, shelflife = #{shelflife}, img = #{img}
+        WHERE email = #{email} and ingredientname = #{ingredientName}
+    </update>
+
+    <update id="updateDiet">
+        update COOL_3_MEAL_DIET SET recipe_id1 = #{recipe_id1}, recipe_id2 = #{recipe_id2}, recipe_id3 = #{recipe_id3}, diet_name = #{diet_name}, diet_ex = #{diet_ex}, keyword = #{keyword}, imgd = #{imgd}
+        WHERE email = #{email} and d_no = #{d_no}
+    </update>
+</mapper>
